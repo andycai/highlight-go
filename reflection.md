@@ -323,3 +323,37 @@ func main() {
 }
 ```
 
+## 解码 json 到反射的 struct
+
+https://stackoverflow.com/questions/45679408/unmarshal-json-to-reflected-struct
+
+```go
+package main
+
+import (
+  "fmt"
+  "encoding/json"
+  "reflect"
+)
+
+type Employee struct {
+  Firstname string     `json:"firstname"`
+}
+
+func main() {
+  //Original struct
+  orig := new(Employee)
+
+  t := reflect.TypeOf(orig)
+  v := reflect.New(t.Elem())
+
+  // reflected pointer
+  newP := v.Interface()
+
+  // Unmarshal to reflected struct pointer
+  json.Unmarshal([]byte("{\"firstname\": \"bender\"}"), newP)
+
+  fmt.Printf("%+v\n", newP)
+}
+```
+
